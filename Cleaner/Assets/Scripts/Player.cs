@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class Player : MonoBehaviour
 {
@@ -13,6 +14,8 @@ public class Player : MonoBehaviour
 
     public int trashcount = 0;
     public int limit = 10;
+
+    public TMP_Text scoreText;
 
     Rigidbody rb;
 
@@ -42,6 +45,8 @@ public class Player : MonoBehaviour
     {
         transform.Translate(Vector3.forward * move.y * Time.deltaTime * speed, Space.Self);
         transform.Translate(Vector3.right * move.x * Time.deltaTime * speed, Space.Self);
+
+        scoreText.text = trashcount + "/" + limit;
     }
 
     private void OnCollisionEnter(Collision collision)
