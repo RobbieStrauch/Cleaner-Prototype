@@ -11,7 +11,8 @@ public class Player : MonoBehaviour
     Vector2 rotate;
     public float speed = 5.0f;
 
-    int trashcount = 0;
+    public int trashcount = 0;
+    public int limit = 10;
 
     Rigidbody rb;
 
@@ -45,7 +46,7 @@ public class Player : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if(trashcount <= 9)
+        if(trashcount <= limit - 1)
         {
             if (collision.collider.tag == "trash")
             {
@@ -57,7 +58,7 @@ public class Player : MonoBehaviour
 
     void compact()
     {
-        if(trashcount >= 10)
+        if(trashcount >= limit)
         {
             trashcount = 0;
         }
