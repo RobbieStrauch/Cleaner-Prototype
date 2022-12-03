@@ -5,19 +5,17 @@ using TMPro;
 
 public class Player : MonoBehaviour
 {
-    public static Player instance;
-    //player movement
     public PlayerInputs inputAction;
+
     Vector2 move;
     Vector2 rotate;
-    public float speed = 5.0f;
+    public float moveSpeed = 5.0f;
+    public float rotateSpeed = 20.0f;
 
-    public int trashcount = 0;
-    public int limit = 10;
+    private int trashCount = 0;
+    public int trashLimit = 10;
 
     public TMP_Text scoreText;
-
-    Rigidbody rb;
 
     private void OnEnable()
     {
@@ -36,36 +34,39 @@ public class Player : MonoBehaviour
 
         inputAction.Player.Move.performed += cntxt => move = cntxt.ReadValue<Vector2>();
         inputAction.Player.Move.canceled += cntxt => move = Vector2.zero;
-        inputAction.Player.Compact.performed += cntxt => compact();
 
-        rb = GetComponent<Rigidbody>();
+        inputAction.Player.Rotate.performed += cntxt => rotate = cntxt.ReadValue<Vector2>();
+        inputAction.Player.Rotate.canceled += cntxt => rotate = Vector2.zero;
+
+        inputAction.Player.Compact.performed += cntxt => compact();
     }
 
     void Update()
     {
-        transform.Translate(Vector3.forward * move.y * Time.deltaTime * speed, Space.Self);
-        transform.Translate(Vector3.right * move.x * Time.deltaTime * speed, Space.Self);
+        transform.Translate(Vector3.forward * -move.y * Time.deltaTime * moveSpeed, Space.Self);
+        //transform.Translate(Vector3.right * move.x * Time.deltaTime * speed, Space.Self);
+        transform.Rotate(Vector3.up * rotate.x * Time.deltaTime * rotateSpeed);
 
-        scoreText.text = trashcount + "/" + limit;
+        scoreText.text = trashCount + "/" + trashLimit;
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        if(trashcount <= limit - 1)
+        if(trashCount <= trashLimit - 1)
         {
-            if (collision.collider.tag == "trash")
+            if (collision.collider.tag == "Trash")
             {
                 Destroy(collision.gameObject);
-                trashcount++;
+                trashCount++;
             }
         }
     }
 
     void compact()
     {
-        if(trashcount >= limit)
+        if(trashCount >= trashLimit)
         {
-            trashcount = 0;
+            trashCount = 0;
         }
     }
 }

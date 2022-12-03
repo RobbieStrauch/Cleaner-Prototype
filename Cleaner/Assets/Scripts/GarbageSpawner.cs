@@ -6,6 +6,7 @@ public class GarbageSpawner : MonoBehaviour
 {
     public List<GameObject> prefabs;
     public GameObject plane;
+    public float spawnThickness = 0f;
 
     private Vector3 planeSize;
     private bool dropGarbage = false;
@@ -34,7 +35,7 @@ public class GarbageSpawner : MonoBehaviour
             for (int i = 0; i < garbageDropPerSpawn; i++)
             {
                 int randomIndex = Random.Range(0, prefabs.Count);
-                Vector3 randomPosition = new Vector3(Random.Range(-planeSize.x, planeSize.x), 1, Random.Range(-planeSize.z, planeSize.z));
+                Vector3 randomPosition = new Vector3(Random.Range(-planeSize.x + spawnThickness, planeSize.x - spawnThickness), 1, Random.Range(-planeSize.z + spawnThickness, planeSize.z - spawnThickness));
                 Instantiate(prefabs[randomIndex], randomPosition, Quaternion.identity);
             }
 
