@@ -11,6 +11,8 @@ public class Player : MonoBehaviour
     Vector2 rotate;
     public float speed = 5.0f;
 
+    int trashcount = 0;
+
     Rigidbody rb;
 
     private void OnEnable()
@@ -38,5 +40,14 @@ public class Player : MonoBehaviour
     {
         transform.Translate(Vector3.forward * move.y * Time.deltaTime * speed, Space.Self);
         transform.Translate(Vector3.right * move.x * Time.deltaTime * speed, Space.Self);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.collider.tag == "trash")
+        {
+            Destroy(collision.gameObject);
+            trashcount++;
+        }
     }
 }
