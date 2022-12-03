@@ -32,6 +32,7 @@ public class Player : MonoBehaviour
 
         inputAction.Player.Move.performed += cntxt => move = cntxt.ReadValue<Vector2>();
         inputAction.Player.Move.canceled += cntxt => move = Vector2.zero;
+        inputAction.Player.Compact.performed += cntxt => compact();
 
         rb = GetComponent<Rigidbody>();
     }
@@ -44,10 +45,21 @@ public class Player : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.collider.tag == "trash")
+        if(trashcount <= 9)
         {
-            Destroy(collision.gameObject);
-            trashcount++;
+            if (collision.collider.tag == "trash")
+            {
+                Destroy(collision.gameObject);
+                trashcount++;
+            }
+        }
+    }
+
+    void compact()
+    {
+        if(trashcount >= 10)
+        {
+            trashcount = 0;
         }
     }
 }
