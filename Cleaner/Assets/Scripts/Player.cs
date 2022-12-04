@@ -12,10 +12,13 @@ public class Player : MonoBehaviour
     public float moveSpeed = 5.0f;
     public float rotateSpeed = 20.0f;
 
+    private int compactCount = 0;
     private int trashCount = 0;
     public int trashLimit = 10;
 
     public TMP_Text scoreText;
+    public TMP_Text countText;
+    public GameObject compactText;
 
     private void OnEnable()
     {
@@ -47,7 +50,17 @@ public class Player : MonoBehaviour
         //transform.Translate(Vector3.right * move.x * Time.deltaTime * speed, Space.Self);
         transform.Rotate(Vector3.up * rotate.x * Time.deltaTime * rotateSpeed);
 
-        scoreText.text = trashCount + "/" + trashLimit;
+        scoreText.text = compactCount.ToString();
+        countText.text = (trashCount + "/" + trashLimit).ToString();
+
+        if (trashCount == trashLimit)
+        {
+            compactText.SetActive(true);
+        }
+        else
+        {
+            compactText.SetActive(false);
+        }
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -66,6 +79,7 @@ public class Player : MonoBehaviour
     {
         if(trashCount >= trashLimit)
         {
+            compactCount++;
             trashCount = 0;
         }
     }
