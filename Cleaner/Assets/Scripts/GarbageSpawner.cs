@@ -1,12 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class GarbageSpawner : MonoBehaviour
 {
     public List<GameObject> prefabs;
+    public GameObject garbageParent;
     public GameObject plane;
+    public GameObject gameOverPanel;
     public float spawnThickness = 0f;
+    public int garbageLimit = 50;
 
     private Vector3 planeSize;
     private bool dropGarbage = false;
@@ -14,13 +18,11 @@ public class GarbageSpawner : MonoBehaviour
     private float dropTime = 5f;
     private int garbageDropPerSpawn = 5;
 
-    // Start is called before the first frame update
     void Start()
     {
         planeSize = plane.GetComponent<Renderer>().bounds.extents;
     }
 
-    // Update is called once per frame
     void Update()
     {
         elapseTime += Time.deltaTime;
@@ -36,11 +38,18 @@ public class GarbageSpawner : MonoBehaviour
             {
                 int randomIndex = Random.Range(0, prefabs.Count);
                 Vector3 randomPosition = new Vector3(Random.Range(-planeSize.x + spawnThickness, planeSize.x - spawnThickness), 1, Random.Range(-planeSize.z + spawnThickness, planeSize.z - spawnThickness));
-                Instantiate(prefabs[randomIndex], randomPosition, Quaternion.identity);
+                Instantiate(prefabs[randomIndex], randomPosition, Quaternion.identity).transform.SetParent(garbageParent.transform);
             }
 
             Reset();
             elapseTime = 0f;
+        }
+
+        if (garbageParent.transform.childCount >= garbageLimit)
+        {
+            Time.timeScale = 0;
+            gameOverPanel.GetComponentInChildren<TMP_Text>().text = "Game Over Too Much Garbage!\nScore: " + Player.instance.GetScore().ToString();
+            gameOverPanel.SetActive(true);
         }
     }
 
