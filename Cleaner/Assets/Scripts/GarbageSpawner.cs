@@ -20,6 +20,7 @@ public class GarbageSpawner : MonoBehaviour
 
     void Start()
     {
+        Time.timeScale = 1f;
         planeSize = plane.GetComponent<Renderer>().bounds.extents;
     }
 
